@@ -1,7 +1,12 @@
-
 import { Message, PollinationsChatResponse } from '../types';
 
-const API_KEY = process.env.API_KEY || '';
+const API_KEY = (() => {
+  try {
+    return process.env.API_KEY || '';
+  } catch (e) {
+    return '';
+  }
+})();
 
 export const streamTextCompletion = async (
   messages: Message[],
@@ -46,9 +51,9 @@ export const streamTextCompletion = async (
       }
 
       const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
+      const dataLines = chunk.split('\n');
 
-      for (const line of lines) {
+      for (const line of dataLines) {
         if (line.startsWith('data: ')) {
           const data = line.slice(6);
           if (data === '[DONE]') {
@@ -77,6 +82,6 @@ export const streamTextCompletion = async (
 export const generateImageUrl = (prompt: string, seed?: number): string => {
   const encodedPrompt = encodeURIComponent(prompt);
   const s = seed ?? Math.floor(Math.random() * 1000000);
-  // Using the flux model as requested in the documentation example
-  return `https://gen.pollinations.ai/image/${encodedPrompt}?model=flux&width=1024&height=1024&seed=${s}&enhance=true&nologo=true&private=true`;
+  // Using zimage model as requested
+  return `https://gen.pollinations.ai/image/${encodedPrompt}?model=zimage&width=1024&height=1024&seed=${s}&enhance=true&nologo=true&private=true`;
 };
