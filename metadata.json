@@ -1,0 +1,8 @@
+{
+  "name": "Pollinations AI Studio",
+  "description": "A high-performance chatbot interface powered by Pollinations AI, featuring real-time streaming text with Gemini-Flash and high-fidelity image generation with Flux.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
