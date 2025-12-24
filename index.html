@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Pollinations Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +21,6 @@
         #root {
             height: 100vh;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #f3f4f6; border-radius: 10px; }
@@ -46,12 +46,7 @@
 </script>
 </head>
 <body>
-    <div id="root">
-        <!-- Minimal fallback if React fails to load -->
-        <div class="flex items-center justify-center h-full text-gray-400 text-sm">
-            Loading...
-        </div>
-    </div>
+    <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

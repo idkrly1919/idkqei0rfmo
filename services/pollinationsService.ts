@@ -1,8 +1,12 @@
+
 import { Message, PollinationsChatResponse } from '../types';
 
+// Robust API Key retrieval for both Vite (local) and Environment (Production)
 const API_KEY = (() => {
   try {
-    return process.env.API_KEY || '';
+    // @ts-ignore
+    return (typeof process !== 'undefined' && process.env?.API_KEY) || 
+           (import.meta as any).env?.VITE_API_KEY || '';
   } catch (e) {
     return '';
   }
@@ -34,7 +38,7 @@ export const streamTextCompletion = async (
     });
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      throw new Error(`API Error: ${response.status}`);
     }
 
     const reader = response.body?.getReader();
@@ -45,10 +49,7 @@ export const streamTextCompletion = async (
 
     while (!isFinished) {
       const { value, done } = await reader.read();
-      if (done) {
-        isFinished = true;
-        break;
-      }
+      if (done) break;
 
       const chunk = decoder.decode(value);
       const dataLines = chunk.split('\n');
@@ -64,12 +65,8 @@ export const streamTextCompletion = async (
           try {
             const parsed: PollinationsChatResponse = JSON.parse(data);
             const content = parsed.choices[0]?.delta?.content;
-            if (content) {
-              onChunk(content);
-            }
-          } catch (e) {
-            // Ignore parse errors for incomplete JSON chunks
-          }
+            if (content) onChunk(content);
+          } catch (e) {}
         }
       }
     }
@@ -82,6 +79,6 @@ export const streamTextCompletion = async (
 export const generateImageUrl = (prompt: string, seed?: number): string => {
   const encodedPrompt = encodeURIComponent(prompt);
   const s = seed ?? Math.floor(Math.random() * 1000000);
-  // Using zimage model as requested
-  return `https://gen.pollinations.ai/image/${encodedPrompt}?model=zimage&width=1024&height=1024&seed=${s}&enhance=true&nologo=true&private=true`;
+  // Using 'zimage' model as requested
+  return `https://gen.pollinations.ai/image/${encodedPrompt}?model=zimage&width=1024&height=1024&seed=${s}&nologo=true&enhance=true`;
 };
